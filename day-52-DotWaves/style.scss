@@ -1,0 +1,82 @@
+// delete the following line if no text is used
+// edit the line if you wanna use other fonts
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:700,300);
+
+$green: #264653;
+$yellow: #e9c46a;
+$rings: 10;
+$dots: 12;
+$radius: 40;
+$frameWidth: 400;
+
+// use only the available space inside the 400x400 frame
+.frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: $frameWidth + px;
+  height: $frameWidth + px;
+  margin-top: -($frameWidth / 2) + px;
+  margin-left: -($frameWidth / 2) + px;
+  border-radius: 2px;
+  box-shadow: 4px 8px 16px 0 rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background: $green;
+  color: #333;
+  font-family: 'Open Sans', Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ring {
+  position: absolute;
+  width: ($radius * 2) + px;
+  height: ($radius * 2) + px;
+  top: (($frameWidth - ($radius * 2)) / 2) + px;
+  left: (($frameWidth - ($radius * 2)) / 2) + px;
+
+  .dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    top: ($radius) + px;
+    left: ($radius) + px;
+
+    .fill {
+      width: 8px;
+      height: 8px;
+      background: $yellow;
+      border-radius: 50%;
+    }
+  }
+}
+
+@for $i from 1 through $rings {
+  $dots: (12 + ($i * 6));
+  $ringBase: $i - 1;
+
+  .ring:nth-child(#{$i}) {
+    .fill {
+      animation: pulse 2s ease-in-out ($i/3) + s alternate infinite both;
+    }
+
+    @for $j from 1 through $dots {
+      $dotBase: $j - 1;
+      $angle: 360 / $dots;
+      .dot:nth-child(#{$j}) {
+        $deg: ($dotBase * $angle) + deg;
+        transform: translate3d(0, (($radius + ($ringBase * 11)) * -1) + px, 0) rotate($deg);
+        transform-origin: 0 ($radius + ($ringBase * 11)) + px;
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
